@@ -13,3 +13,14 @@ Just enter the following line to install Raven-Storm on Linux.
 ```bash
 curl -s https://github.com/ruymhdi/Mvhd-Tornado/blob/main/install.sh | sudo bash -s
 ```
+
+## What module to use
+
+| Method | Module |
+| ------ | --- |
+| ping | l3 |
+| udp/tcp services | l4 |
+| websites | l7 | 
+| botnet | server |
+
+_Try using the l4 attack if l7 fails._
