@@ -8,7 +8,7 @@ _I'm working on this project thats why i update every month_
 
 ## Installation
 
-Just enter the following line to install Raven-Storm on Linux.
+Just enter the following line to install Mvhd-Tornado on Linux.
 
 ```bash
 curl -s https://github.com/ruymhdi/Mvhd-Tornado/blob/main/install.sh | sudo bash -s
