@@ -50,7 +50,7 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
         # psmisc already preinstalled for sure.
         echo "[i] We will now download Mvhd-Tornado..."
         sudo git clone https://github.com/ruymhdi/Mvhd-Tornado.git > /dev/null 2>&1  || echo "[!] Could not download Mvhd-Tornado."
-        cd Raven-Storm > /dev/null 2>&1
+        cd Mvhd-Tornado > /dev/null 2>&1
         echo "[i] We will now install requirements..."
         sudo pip3 install -r requirements.txt  > /dev/null 2>&1 || echo "[!] Could not install the requirements."
         echo "[i] We will now install Mvhd-Tornado..."
@@ -75,7 +75,7 @@ elif [ -f "/etc/arch-release" ]; then  # FIXME
         sudo pacman --noconfirm -S psmisc > /dev/null 2>&1 || echo "[!] Could not install psmisc."
         echo "[i] We will now download Mvhd-Tornado..."
         sudo git clone https://github.com/ruymhdi/Mvhd-Tornado.git > /dev/null 2>&1  || echo "[!] Could not download Mvhd-Tornado."
-        cd Raven-Storm > /dev/null 2>&1
+        cd Mvhd-Tornado > /dev/null 2>&1
         echo "[i] We will now install requirements..."
         sudo pip3 install -r requirements.txt  > /dev/null 2>&1 || echo "[!] Could not install the requirements."
         echo "[i] We will now install Mvhd-Tornado..."
