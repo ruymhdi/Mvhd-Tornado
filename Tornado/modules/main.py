@@ -75,12 +75,14 @@ class Main:
 		banner_middle_color = var.C_Violet
 		banner_bottom_color = var.C_Dark_Blue
 		banner_logo = ("""C_Bo-----------------------------------------------------------C_W
-C_BoStress-Testing-Toolkit by Taguar258 (c) | MIT 2020
-Based on the CLIF Framework by Taguar258 (c) | MIT 2020C_W
-
+THE CREATOR DOES NOT TAKE ANY RESPONSIBILITY FOR DAMAGE CAUSED.
+THE USER ALONE IS RESPONSIBLE, BE IT: ABUSING MVHD-TORNADO
+TO FIT ILLEGAL PURPOSES OR ACCIDENTAL DAMAGE CAUSED BY MVHD-TORNADO.
 BY USING THIS SOFTWARE, YOU MUST AGREE TO TAKE FULL RESPONSIBILITY
-FOR ANY DAMAGE CAUSED BY RAVEN-STORM.
-RAVEN-STORM SHOULD NOT SUGGEST PEOPLE TO PERFORM ILLEGAL ACTIVITIES.
+FOR ANY DAMAGE CAUSED BY MVHD-TORNADO.
+EVERY ATTACK WILL CAUSE TEMPORARY DAMAGE, BUT LONG-TERM DAMAGE IS
+DEFFINITIFLY POSSIBLE.
+MVHD-TORNADO SHOULD NOT SUGGEST PEOPLE TO PERFORM ILLEGAL ACTIVITIES.
 C_Bo-----------------------------------------------------------C_W""")
 		banner_logo = banner_logo.replace("C_W", var.C_None)
 		banner_logo = banner_logo.replace("C_Bo", var.C_Bold)
