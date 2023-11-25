@@ -78,7 +78,7 @@ elif [ -f "/etc/arch-release" ]; then  # FIXME
         cd Raven-Storm > /dev/null 2>&1
         echo "[i] We will now install requirements..."
         sudo pip3 install -r requirements.txt  > /dev/null 2>&1 || echo "[!] Could not install the requirements."
-        echo "[i] We will now install Raven-Storm..."
+        echo "[i] We will now install Mvhd-Tornado..."
         sudo bash ./install_to_bin.sh || echo "[!] Could not install Mvhd-Tornado."
 elif [[ "$OSTYPE" == "win32" ]]; then
         echo "[!] Please run on wsl."

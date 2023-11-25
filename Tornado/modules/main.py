@@ -74,10 +74,38 @@ class Main:
 
 	# 	return text + "\n" + box_border
 
+	def banner(self):  # """ + self.generate_quote() + """
+		# banner_fire_color = var.C_Cyan
+		# banner_middle_color = var.C_Violet
+		# banner_bottom_color = var.C_Dark_Blue
+		banner_fire_color = var.C_Cyan
+		banner_middle_color = var.C_Violet
+		banner_bottom_color = var.C_Dark_Blue
+		banner_logo = ("""C_Bo-----------------------------------------------------------C_W
+C_BoStress-Testing-Toolkit by Taguar258 (c) | MIT 2020
+Based on the CLIF Framework by Taguar258 (c) | MIT 2020C_W
+
+BY USING THIS SOFTWARE, YOU MUST AGREE TO TAKE FULL RESPONSIBILITY
+FOR ANY DAMAGE CAUSED BY RAVEN-STORM.
+RAVEN-STORM SHOULD NOT SUGGEST PEOPLE TO PERFORM ILLEGAL ACTIVITIES.
+C_Bo-----------------------------------------------------------C_W""")
+		banner_logo = banner_logo.replace("C_W", var.C_None)
+		banner_logo = banner_logo.replace("C_Bo", var.C_Bold)
+		banner_logo = banner_logo.replace("C_FIRE", banner_fire_color)
+		banner_logo = banner_logo.replace("C_MID", banner_middle_color)
+		banner_logo = banner_logo.replace("C_BOT", banner_bottom_color)
+		print(banner_logo)
+
 	@event.event
 	def on_ready():
 		system("clear || cls")
-		# self.banner()
+		self.banner()
+		self.help()
+
+	@event.event
+	def on_ready():
+		system("clear || cls")
+		self.banner()
 		self.help()
 
 	@event.event
