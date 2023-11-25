@@ -38,13 +38,6 @@ class Main:
 		var.C_Yellow = "\x1b[33m"
 		var.C_Cyan = "\x1b[36m"
 
-		# var.C_Blink = "\x1b[5;39m"
-		# #var.C_Magenta = "\x1b[35m"
-		# var.C_BRed = "\x1b[1;31m"
-		# var.C_BGreen = "\x1b[1;32m"
-		# var.C_BYellow = "\x1b[1;33m"
-		# var.C_BBlue = "\x1b[1;34m"
-		# #var.C_BCyan = "\x1b[1;36m"
 		var.C_Magenta = "\x1b[1;35m"
 
 		var.session = [[False, ""], [False, []]]  # [Save, path], [Load, Commands_to_run]
@@ -53,17 +46,6 @@ class Main:
 			if var.user_argv[1] == "--connect":
 				var.server = [True, False, var.user_argv[2], var.user_argv[3], 1]
 				status = requests.post((var.server[2] + "reset"), data={"password": var.server[3]}).text
-
-	# def generate_quote(self):
-	# 	quote = choice(["Quote",
-	# 					"Other Examples."])
-
-	# 	len_of_line = (int(59 / 2) - int(len(quote) / 2))
-	# 	splitter = "|"
-
-	# 	text = (((len_of_line - 1) * " ") + splitter + quote + splitter)
-	# 	text_len = len(text)
-	# 	box_border = (((len_of_line - 1) * " ") + ("-" * (text_len - len_of_line + 1)))
 
 	# 	return text + "\n" + box_border
 
@@ -143,20 +125,11 @@ C_Bo-----------------------------------------------------------C_W""")
 		event.help("l4", "Load the layer4 module. (UDP/TCP)")
 		event.help("l3", "Load the layer3 module. (ICMP)")
 		event.help("l7", "Load the layer7 module. (HTTP)")
-		event.help("bl", "Load the bluetooth module. (L2CAP)")
-		event.help("arp", "Load the arp spoofing module. (ARP)")
-		event.help("wifi", "Load the wifi module. (IEEE)")
-		event.help("server", "Load the server module for DDoS atacks.")
-		event.help("scanner", "Load the scanner module.")
 
 		var.modules["Layer4"] = console()
 		var.modules["Layer3"] = console()
 		var.modules["Layer7"] = console()
-		var.modules["BL"] = console()
-		var.modules["ARP"] = console()
-		var.modules["Scanner"] = console()
-		var.modules["Server"] = console()
-		var.modules["WIFI"] = console()
+
 
 	def run_shell(self, command):
 		system(command)
@@ -218,40 +191,6 @@ C_Bo-----------------------------------------------------------C_W""")
 		var.modules["Layer7"].server = var.server
 		var.modules["Layer7"].run()
 
-	@event.command
-	def bl():
-		module("modules.bl.main", var.modules["BL"])
-		var.modules["BL"].session = var.session
-		var.modules["BL"].server = var.server
-		var.modules["BL"].run()
-
-	@event.command
-	def arp():
-		module("modules.arp.main", var.modules["ARP"])
-		var.modules["ARP"].session = var.session
-		var.modules["ARP"].server = var.server
-		var.modules["ARP"].run()
-
-	@event.command
-	def wifi():
-		module("modules.wifi.main", var.modules["WIFI"])
-		var.modules["WIFI"].session = var.session
-		var.modules["WIFI"].server = var.server
-		var.modules["WIFI"].run()
-
-	@event.command
-	def scanner():
-		module("modules.scanner.main", var.modules["Scanner"])
-		var.modules["Scanner"].session = var.session
-		var.modules["Scanner"].server = var.server
-		var.modules["Scanner"].run()
-
-	@event.command
-	def server():
-		module("modules.server.main", var.modules["Server"])
-		var.modules["Server"].session = var.session
-		var.modules["Server"].server = var.server
-		var.modules["Server"].run()
 
 	def help(self):
 		event.help_title("\x1b[1;39mHelp:\x1b[0;39m")
@@ -293,7 +232,7 @@ C_Bo-----------------------------------------------------------C_W""")
 						if item in ["e", "q", "exit", "quit"]:
 							command_list.append(new_list)
 							new_list = []
-						elif item in ["l4", "l3", "l7", "ble", "arp", "scanner", "server"]:
+						elif item in ["l4", "l3", "l7"]:
 							command_list.append(new_list)
 							new_list = []
 						else:

