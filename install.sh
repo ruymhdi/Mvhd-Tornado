@@ -86,7 +86,7 @@ else
         echo "[!] We could not detect your system."
         echo "[i] Please install some things manually"
         git clone https://github.com/ruymhdi/Mvhd-Tornado.git > /dev/null 2>&1 || echo "[!] Please install git"
-        cd Raven-Storm
+        cd Mvhd-Tornado
         python3 --help > /dev/null 2>&1 || echo "[!] Please install python3."
         command -v ping > /dev/null 2>&1 || echo "[!] Please install ping."
         command -v l2ping > /dev/null 2>&1 || echo "[!] Please install bluez."
