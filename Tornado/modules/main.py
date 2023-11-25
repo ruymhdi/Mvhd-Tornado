@@ -115,7 +115,7 @@ class Main:
 		event.help("clear", "Clear the screen.")
 		event.help("record", "Save this session.")
 		event.help("load", "Redo a session using a session file.")
-		event.help("ddos", "Connect to a Raven-Storm server.")
+		# event.help("ddos", "Connect to a Raven-Storm server.")
 		event.help_comment("\nModules:")
 		event.help("l4", "Load the layer4 module. (UDP/TCP)")
 		event.help("l3", "Load the layer3 module. (ICMP)")
@@ -123,7 +123,7 @@ class Main:
 		event.help("bl", "Load the bluetooth module. (L2CAP)")
 		event.help("arp", "Load the arp spoofing module. (ARP)")
 		event.help("wifi", "Load the wifi module. (IEEE)")
-		event.help("server", "Load the server module for DDos atacks.")
+		event.help("server", "Load the server module for DDoS atacks.")
 		event.help("scanner", "Load the scanner module.")
 
 		var.modules["Layer4"] = console()
@@ -236,32 +236,6 @@ class Main:
 		print("")
 
 	@event.command
-	def ddos(self):
-		print("")
-		try:
-			ddos_host = input("Enter Host URL of the server: ")
-			ddos_password = input("Enter the password: ")
-			if "http" not in ddos_host:
-				raise Exception("Wrong Host URL.")
-			if "/" != ddos_host[-1]:
-				ddos_host += "/"
-			test_data = {"password": ddos_password}
-			agreed = requests.post((ddos_host + "get/agreed"), data=test_data).text
-			if agreed != "False":
-				raise Exception("Wrong data was given.")
-			ddos_role = tools.question("Do you want this to be used as a host?")
-			status = requests.post((ddos_host + "reset"), data=test_data).text
-			if status != "200":
-				print("Something strange happened.")
-			var.server[1] = ddos_role
-			var.server[2] = ddos_host
-			var.server[3] = ddos_password
-			var.server[0] = True
-		except Exception as ex:
-			print("An exception occured.", ex)
-		print("")
-
-	@event.command
 	def record(command):
 		print("")
 		try:
@@ -313,15 +287,15 @@ class Main:
 	def upgrade():
 		try:
 			chdir("/tmp")
-			system("sudo git clone https://github.com/Taguar258/Raven-Storm.git")
-			chdir("/tmp/Raven-Storm/")
+			system("sudo git clone https://github.com/ruymhdi/Mvhd-Tornado.git")
+			chdir("/tmp/Mvhd-Tornado/")
 			system("sudo bash ./install_to_bin.sh")
-			print("[i] Deleting the temporary stored Raven-Storm...")
-			system("sudo rm -rf -i /tmp/Raven-Storm/")
+			print("[i] Deleting the temporary stored Mvhd-Tornado...")
+			system("sudo rm -rf -i /tmp/Mvhd-Tornado/")
 			var.stop()
 			quit()
 		except Exception:
-			print("Cound not upgrade Raven-Storm. (Make sure to use sudo)")
+			print("Cound not upgrade Mvhd-Tornado. (Make sure to use sudo)")
 
 	@event.command
 	def clear():
@@ -339,3 +313,4 @@ class Main:
 def setup(console):
 	console.ps1 = ">> "
 	console.add(Main(console), event)
+	
