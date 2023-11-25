@@ -23,7 +23,7 @@ if [ -f "/etc/debian_version" ]; then
         echo "[i] We will now install psmisc..."
         sudo apt-get install -y psmisc > /dev/null 2>&1 || echo "[!] Could not install psmisc."
         echo "[i] We will now download Mvhd-Tornado..."
-        sudo git clone https://github.com/ruymhdi/Mvhd-Tornado.git > /dev/null 2>&1 || echo "[!] Could not download mvhdDDoS."
+        sudo git clone https://github.com/ruymhdi/Mvhd-Tornado.git > /dev/null 2>&1 || echo "[!] Could not download Mvhd-Tornado."
         cd Raven-Storm > /dev/null 2>&1
         echo "[i] We will now install requirements..."
         sudo pip3 install -r requirements.txt  > /dev/null 2>&1 || echo "[!] Could not install the requirements."
