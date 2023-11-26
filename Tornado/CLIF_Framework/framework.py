@@ -1,5 +1,3 @@
-# The CLIF Framework has been programmed by Taguar258 and is published under the MIT License.
-
 import importlib
 
 
