@@ -54,12 +54,21 @@ class Main:
 		# banner_middle_color = var.C_Violet
 		# banner_bottom_color = var.C_Dark_Blue
 		banner_fire_color = var.C_Cyan
-		banner_middle_color = var.C_Violet
+		banner_middle_color = var.C_Red
 		banner_bottom_color = var.C_Dark_Blue
 		banner_logo = ("""C_Bo-----------------------------------------------------------C_W
+C_MID
+											C_WC_Bov.""" + "1.0" + """C_WC_FIRE
+M    MM  VV  VV  HHH  HH  DD   DD  TTTTTTTT ooooooo  rrrrrrr  nnnnn  aaaaa  d   d  ooooo
+MM   MM  VV  VV  HHH  HH  DD   DD     TT    oo   oo  rr   rr  nn  n  a   a  d   d  o   o
+MM M MM  VV  VV  HHHHHHH  DD   DD     TT    oo   oo  rrrrrr   nn  n  aaaaa  d   d  o   o
+MM   MM  VV  VV  HH   HH  DD   DD     TT    oo   oo  rr  rr   nn  n  a   a  d   d  o   o
+MM   MM   V  V   HH   HH  DD   DD     TT    ooooooo  rr   rr  nn  n  a   a  d   d  ooooC_MID
+
 THE CREATOR DOES NOT TAKE ANY RESPONSIBILITY FOR DAMAGE CAUSED.
 THE USER ALONE IS RESPONSIBLE, BE IT: ABUSING MVHD-TORNADO
 TO FIT ILLEGAL PURPOSES OR ACCIDENTAL DAMAGE CAUSED BY MVHD-TORNADO.
+				 
 BY USING THIS SOFTWARE, YOU MUST AGREE TO TAKE FULL RESPONSIBILITY
 FOR ANY DAMAGE CAUSED BY MVHD-TORNADO.
 EVERY ATTACK WILL CAUSE TEMPORARY DAMAGE, BUT LONG-TERM DAMAGE IS
